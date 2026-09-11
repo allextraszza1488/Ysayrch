@@ -13,11 +13,36 @@ export HYPRLAND_INSTANCE_SIGNATURE="$(ls -t "${XDG_RUNTIME_DIR:-/run/user/$(id -
 # lookup. The previous version numbered a filtered list but looked the address
 # up in the UNFILTERED one, so any unmapped window shifted every index and you
 # focused the wrong window -- silently, with no error.
+#
+# Current-workspace windows first, then everything else -- otherwise the
+# most likely window you want (something on the workspace you're already
+# looking at) could land anywhere in the list.
 # -----------------------------------------------------------------------------
-mapped=$(hyprctl clients -j | jq '[.[] | select(.mapped==true)]')
+active_ws=$(hyprctl activeworkspace -j | jq '.id')
+mapped=$(hyprctl clients -j | jq --argjson active "$active_ws" \
+  '[.[] | select(.mapped==true)] | sort_by(.workspace.id != $active)')
+
+# fuzzel --dmenu has no real per-line icon support (only its desktop-entry
+# launcher mode does) -- a Nerd Font glyph prefix is the practical stand-in,
+# same idea as waybar's blackletter glyph substitutions elsewhere in this setup.
+icon_for() {
+  case "${1,,}" in
+    kitty)               printf '' ;; # nf-dev-terminal
+    firefox|librewolf)   printf '' ;; # nf-fa-firefox
+    btop)                printf '' ;; # nf-md-chart_areaspline
+    thunar)               printf '' ;; # nf-fa-folder_open
+    imv)                  printf '' ;; # nf-fa-picture_o
+    qbittorrent)         printf '' ;; # nf-fa-download
+    *)                    printf '' ;; # nf-fa-window_maximize (default)
+  esac
+}
+export -f icon_for
 
 # numbered menu lines, built from the filtered array
-list=$(echo "$mapped" | jq -r 'to_entries[] | "\(.key+1): \(.value.class) — \(.value.title)"')
+list=$(echo "$mapped" | jq -r 'to_entries[] | "\(.key+1)\t\(.value.class)\t\(.value.title)"' | \
+  while IFS=$'\t' read -r n class title; do
+    printf '%s: %s %s — %s\n' "$n" "$(icon_for "$class")" "$class" "$title"
+  done)
 
 # nothing open, nothing to switch to
 [ -z "$list" ] && exit 0
