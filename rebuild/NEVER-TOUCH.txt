@@ -1,0 +1,8 @@
+Pop / other Linux — do not mount, format, resize, decrypt, or write.
+
+nvme0n1p5  100G  ext4   other linux root     UUID 6c76b99c-4c5e-48ec-95a8-0d8a7795ae81
+nvme0n1p6    1G  vfat   other linux ESP      UUID FA97-AEF9  (systemd-boot, firmware Boot0004)
+nvme0n1p7  983G  LUKS   other linux data     UUID d135e5a0-b78a-4379-bb50-4fcb18196be8
+
+Firmware Boot0004 "Linux Boot Manager" stays. Do not run os-prober onto that ESP.
+This Arch is only p1 (root) + p2 (this ESP). Reinstall = those two only.
