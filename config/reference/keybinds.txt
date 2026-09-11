@@ -11,6 +11,7 @@ SUPER + P                   toggle pseudotile (this window only)
 SUPER + E                   toggle split orientation (dwindle)
 SUPER + C                   center floating window
 SUPER + Tab                 window switcher (fuzzel list)
+SUPER + Space               workspace overview (fuzzel: every workspace + windows)
 SUPER + S                   toggle scratchpad (dropdown terminal)
 SUPER + CTRL + S            move focused window to scratchpad
 SUPER + CTRL + V            clipboard history (cliphist + fuzzel)

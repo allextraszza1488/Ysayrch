@@ -317,6 +317,11 @@ hl.bind(mod .. " + C", hl.dsp.window.center())
 -- alt-tab, keyboard-only: a fuzzel list of open windows
 hl.bind(mod .. " + Tab", hl.dsp.exec_cmd(scripts .. "/window-switcher.sh"))
 
+-- workspace overview, keyboard-only: fuzzel list of every workspace + its
+-- windows, grouped, current marked. Text-based, not a thumbnail grid --
+-- see workspace-overview.sh's own header for why.
+hl.bind(mod .. " + Space", hl.dsp.exec_cmd(scripts .. "/workspace-overview.sh"))
+
 -- SUPER + left mouse drags a window
 hl.bind(mod .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true })
 -- SUPER + right mouse resizes it
