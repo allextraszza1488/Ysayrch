@@ -10,8 +10,9 @@ export HYPRLAND_INSTANCE_SIGNATURE="$(ls -t "${XDG_RUNTIME_DIR:-/run/user/$(id -
 # all three sheets live here; hand-maintained plain text, one entry per line
 DIR="$HOME/.config/reference"
 
-# first menu: which sheet
-category=$(printf 'Keybinds\nLinux commands\nVim cheatsheet' | fuzzel --dmenu --prompt "shortcuts> ")
+# first menu: which sheet. || true: fuzzel exits non-zero on Escape, which
+# under set -e would abort before the case statement's own escape branch ran.
+category=$(printf 'Keybinds\nLinux commands\nVim cheatsheet' | fuzzel --dmenu --prompt "shortcuts> " || true)
 
 # second menu: filter within the chosen sheet, read-only
 case "$category" in

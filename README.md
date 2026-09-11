@@ -11,6 +11,6 @@ cd ~/arch-skeleton
 
 Does **not** touch disks. Never p5/p6/p7.
 
-Then reboot (or login tty1). `start-hyprland` runs on tty1. Look is **alpenflage**; `toggle-look.sh` / your existing keybind switches colors. In kitty: `gyaru` (starts ollama on demand, not at boot).
+Then reboot (or login tty1). `start-hyprland` runs on tty1. Look is **alpenflage**; `toggle-look.sh` / your existing keybind cycles alpenflage / tigerstripe / gyaru (gyaru is just a color look now, not an ollama command).
 
 `--without local-ai` if you don't want the 14B pulls (~18G).

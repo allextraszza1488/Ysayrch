@@ -65,7 +65,9 @@ for ((i = 0; i < count; i++)); do
 done
 list="${list%$'\n'}"
 
-chosen=$(echo "$list" | fuzzel --dmenu --prompt "workspace> ")
+# || true: fuzzel exits non-zero on Escape, which under set -e would abort
+# before the empty-check below runs (same pattern as the other fuzzel scripts).
+chosen=$(echo "$list" | fuzzel --dmenu --prompt "workspace> " || true)
 [ -z "$chosen" ] && exit 0
 
 idx=$(echo "$chosen" | grep -oE '^[0-9]+')

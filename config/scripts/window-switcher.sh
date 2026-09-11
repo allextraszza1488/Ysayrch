@@ -47,8 +47,10 @@ list=$(echo "$mapped" | jq -r 'to_entries[] | "\(.key+1)\t\(.value.class)\t\(.va
 # nothing open, nothing to switch to
 [ -z "$list" ] && exit 0
 
-# fuzzel returns the whole chosen line
-chosen=$(echo "$list" | fuzzel --dmenu --prompt "window> ")
+# fuzzel returns the whole chosen line. || true: fuzzel exits non-zero on
+# Escape, which under set -e would abort before the empty-check below runs
+# (caught by ultrareview, same pattern fixed across the other fuzzel scripts).
+chosen=$(echo "$list" | fuzzel --dmenu --prompt "window> " || true)
 
 # escaped out of the menu
 [ -z "$chosen" ] && exit 0

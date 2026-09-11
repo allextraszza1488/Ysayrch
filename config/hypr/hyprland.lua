@@ -258,9 +258,15 @@ hl.window_rule({
   pin   = true,
   -- 0.35/0.4 measured out at only 68x18 terminal cells (screenshot showed
   -- btop's "too small" error, needs 80x24) -- cell size at this font/DPI is
-  -- bigger than a quick estimate suggested. Bumped and re-verified against
-  -- the actual reported terminal grid, not just pixel dimensions.
-  size  = { "monitor_w*0.5", "monitor_h*0.6" },
+  -- bigger than a quick estimate suggested. Bumped once already and
+  -- re-verified against the actual reported terminal grid.
+  --
+  -- Bumped again 2026-09-12: adding the gpu0 box (shown_boxes in
+  -- btop.conf) raised btop's own required height to 80x36; 0.6 only gave
+  -- 28 rows (confirmed via btop's own "Terminal size too small" screen,
+  -- not guessed), so height went to 0.8. Width was already sufficient
+  -- (97 cols vs 80 needed) and stayed at 0.5.
+  size  = { "monitor_w*0.5", "monitor_h*0.8" },
 })
 
 

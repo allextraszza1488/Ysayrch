@@ -251,11 +251,16 @@ install_link() {
 # committed copy stops matching the moment you switch looks. Treat these
 # the same way run_40_look already treats look-state.lua/current-look:
 # leave alone once they exist.
+#
+# Bare filenames, not "hypr/foo" -- install_tree is always called with an
+# app's own subdirectory as $src (e.g. "config/hypr", not "config"), so
+# $rel is already relative to that subdir. A "hypr/"-prefixed entry could
+# never match and the guard was silently dead code (caught by ultrareview).
 RUNTIME_STATE_FILES=(
-  hypr/look-state.lua
-  hypr/current-look
-  hypr/hyprpaper.conf
-  kitty/active-look.conf
+  look-state.lua
+  current-look
+  hyprpaper.conf
+  active-look.conf
 )
 
 is_runtime_state() {
@@ -306,7 +311,7 @@ run_10_hypr_stack() {
   say "10-hypr-stack"
   local pkgs=(
     hyprland xdg-desktop-portal-hyprland waybar hyprpaper imv lua jq libnotify
-    fuzzel mako grim slurp wl-clipboard yazi pipewire pipewire-pulse wireplumber
+    fuzzel mako grim slurp wl-clipboard cliphist yazi pipewire pipewire-pulse wireplumber
     noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-jetbrains-mono-nerd firefox kitty fish curl
   )
   say "pacman_needed: ${pkgs[*]}"
