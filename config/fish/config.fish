@@ -38,8 +38,6 @@ if status is-interactive
     echo "         ctrl+shift+=/- font size  ·  ctrl+shift+f5 reload config"
     echo ""
 end
-export PATH="$HOME/.local/bin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
 fish_add_path $HOME/.local/bin
 
 # >>> grok installer >>>

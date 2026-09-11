@@ -19,12 +19,12 @@ MARKER=$HOME/.config/hypr/current-look
 # no marker yet means first run; assume alpenflage so the first toggle goes to tigerstripe
 current=$(cat "$MARKER" 2>/dev/null || echo "alpenflage")
 
-# only two looks, so "the other one" is a simple flip
-if [ "$current" = "alpenflage" ]; then
-  next="tigerstripe"
-else
-  next="alpenflage"
-fi
+# three looks now, cycle in a fixed order
+case "$current" in
+  alpenflage)  next="tigerstripe" ;;
+  tigerstripe) next="gyaru" ;;
+  *)           next="alpenflage" ;;
+esac
 
 # hyprland picks this up on the reload below
 cp "$LOOKS_DIR/$next.lua" "$STATE"
@@ -40,6 +40,11 @@ cp $HOME/.config/kitty/looks/"$next".conf \
 
 # parse the recipe with real Lua rather than grepping Lua syntax with sed
 wallpaper=$(lua5.4 -e "io.write(dofile('$LOOKS_DIR/$next.lua').wallpaper)")
+
+# gyaru's "wallpaper" field is a folder, not a file -- pick one at random
+if [ "$next" = "gyaru" ]; then
+  wallpaper=$(find "$wallpaper" -maxdepth 1 -type f | shuf -n1)
+fi
 
 # hyprpaper has no reload command, so its config is rewritten and it is restarted
 cat > $HOME/.config/hypr/hyprpaper.conf <<EOF2

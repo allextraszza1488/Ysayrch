@@ -51,6 +51,10 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("mako")
     -- status bar; has NO single-instance guard, so a duplicate start stacks two bars
     hl.exec_cmd("waybar")
+    -- clipboard history: text + image watchers, feed cliphist's database.
+    -- Picker is clipboard-picker.sh on SUPER+CTRL+V. Requires cliphist installed.
+    hl.exec_cmd("wl-paste --type text --watch cliphist store")
+    hl.exec_cmd("wl-paste --type image --watch cliphist store")
 end)
 
 
@@ -228,7 +232,7 @@ hl.bind(mod .. " + N", hl.dsp.exec_cmd(terminal .. " -e " .. files))
 -- nvim-based file manager; the .desktop entry launches this same script for folders
 hl.bind(mod .. " + F", hl.dsp.exec_cmd(scripts .. "/filemanager-nvim.sh"))
 -- system monitor, on the Windows muscle-memory chord
-hl.bind("CTRL + ALT + Delete", hl.dsp.exec_cmd(terminal .. " -e btop"))
+hl.bind("CTRL + ALT + Delete", hl.dsp.exec_cmd(terminal .. " --class btop -e btop"))
 -- picker over keybinds / linux commands / vim cheatsheet
 hl.bind(mod .. " + SHIFT + A", hl.dsp.exec_cmd(scripts .. "/shortcuts-hub.sh"))
 
@@ -242,6 +246,22 @@ hl.window_rule({
 })
 
 -- the editor nvim-fm opens on Enter gets no rule at all: it tiles, like everything else
+
+-- btop: float small and pin across workspaces, so it's tuckable in a corner
+-- and visible from anywhere rather than tiling in the way. "pin" field here
+-- is a best-effort guess at this Lua API's naming, verified live via
+-- hyprctl clients after reload -- not copied from confirmed documentation.
+hl.window_rule({
+  name  = "btop-float-pinned",
+  match = { class = "^(btop)$" },
+  float = true,
+  pin   = true,
+  -- 0.35/0.4 measured out at only 68x18 terminal cells (screenshot showed
+  -- btop's "too small" error, needs 80x24) -- cell size at this font/DPI is
+  -- bigger than a quick estimate suggested. Bumped and re-verified against
+  -- the actual reported terminal grid, not just pixel dimensions.
+  size  = { "monitor_w*0.5", "monitor_h*0.6" },
+})
 
 
 -- -----------------------------------------------------------------------------
@@ -366,6 +386,8 @@ hl.bind(mod .. " + mouse_down",   hl.dsp.focus({ workspace = "e+1" }))
 hl.bind(mod .. " + S",        hl.dsp.exec_cmd(scripts .. "/scratchpad-term.sh"))
 -- throw the focused window into the scratchpad instead
 hl.bind(mod .. " + CTRL + S", hl.dsp.window.move({ workspace = "special:scratch" }))
+-- clipboard history picker (SUPER+V/+SHIFT/+C are all taken by window mgmt)
+hl.bind(mod .. " + CTRL + V", hl.dsp.exec_cmd(scripts .. "/clipboard-picker.sh"))
 
 
 -- -----------------------------------------------------------------------------
@@ -417,5 +439,5 @@ hl.bind("Print", hl.dsp.exec_cmd(
 
 -- re-read this file without restarting the session
 hl.bind(mod .. " + SHIFT + R", hl.dsp.exec_cmd("hyprctl reload"))
--- swap alpenflage <-> tigerstripe
+-- cycle alpenflage -> tigerstripe -> gyaru -> alpenflage
 hl.bind(mod .. " + SHIFT + T", hl.dsp.exec_cmd(scripts .. "/toggle-look.sh"))

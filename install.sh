@@ -63,7 +63,7 @@ canonical_module() {
     tuning|70-tuning|70) printf '70-tuning\n' ;;
     security|80-security|80) printf '80-security\n' ;;
     steam|90-steam|90) printf '90-steam\n' ;;
-    local-ai|91-local-ai|91|ollama|gyaru) printf '91-local-ai\n' ;;
+    local-ai|91-local-ai|91|ollama) printf '91-local-ai\n' ;;
     *) fail "unknown module: $1 (try: ${ALL_MODULES[*]})" ;;
   esac
 }
@@ -244,6 +244,28 @@ install_link() {
   say "linked $dest -> $src"
 }
 
+# Runtime-state files that toggle-look.sh owns after first install (see
+# config/hypr/.gitignore, config/kitty/.gitignore). A plain install_tree
+# copy compares repo-vs-live content and overwrites on any difference --
+# which clobbers whatever look you've since toggled to, since the repo's
+# committed copy stops matching the moment you switch looks. Treat these
+# the same way run_40_look already treats look-state.lua/current-look:
+# leave alone once they exist.
+RUNTIME_STATE_FILES=(
+  hypr/look-state.lua
+  hypr/current-look
+  hypr/hyprpaper.conf
+  kitty/active-look.conf
+)
+
+is_runtime_state() {
+  local rel=$1 s
+  for s in "${RUNTIME_STATE_FILES[@]}"; do
+    [[ "$rel" == "$s" ]] && return 0
+  done
+  return 1
+}
+
 # Recurse files and symlinks under $1 into $2, using install_file.
 install_tree() {
   local src=$1 dest=$2
@@ -251,6 +273,10 @@ install_tree() {
   [[ -d "$src" ]] || return 0
   while IFS= read -r -d '' f; do
     rel="${f#"$src"/}"
+    if is_runtime_state "$rel" && [[ -e "$dest/$rel" || -L "$dest/$rel" ]]; then
+      say "skip (runtime state, already exists): $dest/$rel"
+      continue
+    fi
     install_file "$f" "$dest/$rel"
   done < <(find "$src" \( -type f -o -type l \) -print0)
 }
@@ -271,7 +297,6 @@ run_00_preflight() {
   echo "  root_device=$(root_device)"
   echo "  root_fs=$(detect_root_fs)  bootloader=$(detect_bootloader)  chassis=$(detect_chassis)"
   echo "  nproc=$(detect_nproc)  nvidia=$(_bool has_nvidia) amd=$(_bool has_amd) intel=$(_bool has_intel)"
-  echo "  refuse_foreign_disk on anything other than $(root_device)"
   if [[ -n "$HOST" ]]; then
     echo "  --host $HOST (apply host overlay from host/$HOST if present)"
   fi
@@ -371,11 +396,6 @@ run_30_dots() {
     install_tree "$fontsrc" "$(real_home)/.local/share/fonts"
     fc-cache -f "$(real_home)/.local/share/fonts" >/dev/null 2>&1 || true
   fi
-  if [[ -x "$ROOT/extras/bin/gyaru" ]]; then
-    chmod +x "$ROOT/extras/bin/gyaru"
-    install_file "$ROOT/extras/bin/gyaru" "$dest_bin/gyaru-llm"
-    chmod +x "$dest_bin/gyaru-llm"
-  fi
 }
 
 run_40_look() {
@@ -407,7 +427,11 @@ run_50_snapshots() {
   fs=$(detect_root_fs)
   boot=$(detect_bootloader)
   echo "  root_fs=$fs  bootloader=$boot  root_device=$(root_device)"
-  refuse_foreign_disk "$(root_device)"
+  # refuse_foreign_disk exists for a module that takes an explicit disk-path
+  # argument to operate on; nothing below touches any device other than the
+  # live root itself, so there's no separate target to check here. Calling
+  # it with root_device()'s own output (as this line used to) was a no-op --
+  # canon == root by construction, the fail branch could never trigger.
   if [[ "$fs" != btrfs ]]; then
     say "not btrfs — skipping snapper (forced on by --with)"
     return 0
@@ -540,7 +564,7 @@ run_90_steam() {
 }
 
 run_91_local_ai() {
-  say "91-local-ai (on-demand ollama + gyaru; not enabled at boot)"
+  say "91-local-ai (on-demand ollama; not enabled at boot)"
   local dest_share dest_unit unit_src uuid
   dest_share="$(real_home)/.local/share/arch-skeleton/ollama"
   dest_unit="$(real_home)/.config/systemd/user/ollama.service"
@@ -565,7 +589,6 @@ run_91_local_ai() {
   fi
 
   install_file "$ROOT/extras/ollama/Modelfile" "$dest_share/Modelfile"
-  install_file "$ROOT/extras/ollama/Modelfile.gyaru" "$dest_share/Modelfile.gyaru"
 
   systemctl --user daemon-reload
   systemctl --user start ollama.service
@@ -585,11 +608,8 @@ run_91_local_ai() {
   say "pull qwen3:14b (work f3nt)"
   ollama pull qwen3:14b
   ollama create f3nt -f "$dest_share/Modelfile"
-  say "pull abliterated 14b (gyaru) — large"
-  ollama pull huihui_ai/qwen3-abliterated:14b
-  ollama create gyaru -f "$dest_share/Modelfile.gyaru"
   systemctl --user stop ollama.service
-  say "after reboot: tty1 -> start-hyprland (alpenflage). gyaru: run 'gyaru' in kitty"
+  say "after reboot: tty1 -> start-hyprland (alpenflage)"
 }
 
 run_module() {

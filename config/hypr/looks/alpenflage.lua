@@ -5,5 +5,5 @@ return {
   border_inactive = "rgba(1d2021ee)",
   glow_active     = "rgba(c23d46a6)",
   glow_inactive   = "rgba(9d2b3233)",
-  wallpaper       = os.getenv("HOME") .. "/Pictures/what-if-everything-was-alpenflage-v0-6ektbpr0bfnc1.jpg",
+  wallpaper       = os.getenv("HOME") .. "/Pictures/wallpapers/what-if-everything-was-alpenflage-v0-6ektbpr0bfnc1.jpg",
 }
