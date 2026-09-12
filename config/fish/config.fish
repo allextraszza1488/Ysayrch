@@ -47,9 +47,6 @@ if status is-interactive
     # replaces the old plain-ascii-art print; config lives in
     # ~/.config/fastfetch/config.jsonc (kitty image protocol logo)
     fastfetch
-
-    echo "  kitty  ctrl+shift+enter h-split · ctrl+shift+s v-split · ctrl+shift+w close · ctrl+shift+[/] cycle panes"
-    echo "         ctrl+shift+c/v copy/paste · ctrl+shift+f5 reload config"
     echo ""
 end
 fish_add_path $HOME/.local/bin
