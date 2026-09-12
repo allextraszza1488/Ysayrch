@@ -235,6 +235,9 @@ hl.bind(mod .. " + F", hl.dsp.exec_cmd(scripts .. "/filemanager-nvim.sh"))
 hl.bind("CTRL + ALT + Delete", hl.dsp.exec_cmd(terminal .. " --class btop -e btop"))
 -- picker over keybinds / linux commands / vim cheatsheet
 hl.bind(mod .. " + SHIFT + A", hl.dsp.exec_cmd(scripts .. "/shortcuts-hub.sh"))
+-- command-phrase palette: pick a common command, get it typed/copied for you
+-- (unshifted pair to SHIFT+A above -- that one only displays, this inserts)
+hl.bind(mod .. " + A", hl.dsp.exec_cmd(scripts .. "/phrase-picker.sh"))
 
 -- imv, spawned by nvim-fm/init.lua when you press Enter on an image
 hl.window_rule({

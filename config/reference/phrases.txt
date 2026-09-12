@@ -1,0 +1,17 @@
+# Common shell phrases for phrase-picker.sh (SUPER+A). Maintained BY HAND,
+# same as keybinds.txt/linux-commands.txt -- nothing checks this stays useful.
+# Format: name | description | the actual command text
+#
+git status | short git status | git status -sb
+git log graph | compact commit graph | git log --oneline --graph --decorate -20
+git add all + commit | stage everything, prompt for a message | git add -A && git commit -m ""
+ollama list | list local models | ollama list
+ollama ps | show currently loaded/running models | ollama ps
+storage usage | disk usage summary for /storage | df -h /storage
+biggest dirs here | top 15 largest dirs under cwd | du -h -d1 . | sort -rh | head -15
+hypr clients | dump all Hyprland windows as JSON | hyprctl clients -j | jq .
+hypr monitors | dump connected monitors as JSON | hyprctl monitors -j | jq .
+journal errors | today's errors from the system journal | journalctl -p err -b
+find large files | files over 500M under cwd | find . -xdev -size +500M -exec ls -lh {} \;
+watch gpu | live nvidia-smi refresh | watch -n1 nvidia-smi
+listening ports | what's listening on which port | ss -tulpn

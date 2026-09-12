@@ -30,12 +30,26 @@ if status is-interactive
         fzf --fish | source
     end
 
-    # Commands to run in interactive sessions can go here
-    command cat ~/.config/fish/art.ascii.txt  # bypass the cat->bat alias above: plain art, no syntax box
-    echo ""
-    echo "  kitty  ctrl+shift+enter new win  ·  ctrl+shift+t new tab  ·  ctrl+shift+w close window · ctrl+shift+q close tab"
-    echo "         ctrl+shift+←/→ switch tab ·  ctrl+shift+c/v copy/paste ·  ctrl+shift+f search"
-    echo "         ctrl+shift+=/- font size  ·  ctrl+shift+f5 reload config"
+    # Look-aware prompt colors, read once per shell start (not on every
+    # prompt draw -- an awk+file read per keypress would add up). A shell
+    # open across a SUPER+SHIFT+T toggle keeps its old colors until the next
+    # new window, same caveat kitty.conf's own header already documents.
+    function _look_color -a key
+        awk -v k="$key" '$1==k {print $2; exit}' ~/.config/kitty/active-look.conf 2>/dev/null | string trim -c '#'
+    end
+    set -g LOOK_FG (_look_color foreground)
+    set -g LOOK_DIM (_look_color color8)
+    set -g LOOK_ACCENT (_look_color cursor)
+    functions -e _look_color
+
+    set -g fish_greeting ""
+
+    # replaces the old plain-ascii-art print; config lives in
+    # ~/.config/fastfetch/config.jsonc (kitty image protocol logo)
+    fastfetch
+
+    echo "  kitty  ctrl+shift+enter h-split · ctrl+shift+s v-split · ctrl+shift+w close · ctrl+shift+[/] cycle panes"
+    echo "         ctrl+shift+c/v copy/paste · ctrl+shift+f5 reload config"
     echo ""
 end
 fish_add_path $HOME/.local/bin
