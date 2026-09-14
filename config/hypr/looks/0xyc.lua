@@ -5,5 +5,5 @@ return {
   border_inactive = "rgba(000000ee)",
   glow_active     = "rgba(2a2a2aa6)",
   glow_inactive   = "rgba(00000033)",
-  wallpaper       = os.getenv("HOME") .. "/Pictures/wallpapers/tigerstripe-wallpaper.webp",
+  wallpaper       = os.getenv("HOME") .. "/Pictures/wallpapers/0xyc-night.jpg",
 }
