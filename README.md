@@ -11,6 +11,6 @@ cd ~/arch-skeleton
 
 Does **not** touch disks. Never p5/p6/p7.
 
-Then reboot (or login tty1). `start-hyprland` runs on tty1. Look is **0xyc**; SUPER+SHIFT+T cycles 0xyc / mdmamph / diyetlyser. Windows are opaque.
+Then reboot (or login tty1). `start-hyprland` runs on tty1. Look is **0xyc**; SUPER+SHIFT+T cycles 0xyc / mdmamph / diyetlyser. Wallpapers ship in `config/wallpapers/` (2560×1440). Windows are opaque.
 
 `--without local-ai` if you don't want the 14B pulls (~18G).

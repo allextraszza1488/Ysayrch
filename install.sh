@@ -424,6 +424,23 @@ run_40_look() {
     printf '0xyc\n' > "$dest_marker"
     say "wrote $dest_marker"
   fi
+
+  local wpsrc="$ROOT/config/wallpapers"
+  local wpdest="$(real_home)/Pictures/wallpapers"
+  if [[ -d "$wpsrc" ]]; then
+    mkdir -p "$wpdest"
+    local f
+    for f in "$wpsrc"/*; do
+      [[ -e "$f" ]] || continue
+      local destf="$wpdest/$(basename -- "$f")"
+      if [[ -e "$destf" ]]; then
+        say "wallpaper $(basename -- "$f") already exists — not overwriting"
+      else
+        cp -a -- "$f" "$destf"
+        say "seeded $destf"
+      fi
+    done
+  fi
 }
 
 run_50_snapshots() {

@@ -1,4 +1,4 @@
--- 0xyc: tigerstripe wallpaper, hacky/dark, comfortable to read.
+-- 0xyc: dark gothic forest wallpaper, hacky/dark, comfortable to read.
 -- Black + dark tones, not grey-on-grey.
 return {
   border_active   = { "rgba(3a3a3aee)", "rgba(1a1a1aee)" },
