@@ -45,7 +45,7 @@ if status is-interactive
     set -g fish_greeting ""
 
     # replaces the old plain-ascii-art print; config lives in
-    # ~/.config/fastfetch/config.jsonc (kitty image protocol logo)
+    # ~/.config/fastfetch/config.jsonc — small builtin logo, no image
     fastfetch
     echo ""
 end

@@ -408,7 +408,7 @@ run_40_look() {
   local dest_state dest_marker src
   dest_state="$(real_home)/.config/hypr/look-state.lua"
   dest_marker="$(real_home)/.config/hypr/current-look"
-  src="$ROOT/config/hypr/looks/alpenflage.lua"
+  src="$ROOT/config/hypr/looks/0xyc.lua"
   [[ -f "$src" ]] || fail "missing look recipe $src"
 
   if [[ -e "$dest_state" ]]; then
@@ -416,12 +416,12 @@ run_40_look() {
   else
     mkdir -p "$(dirname -- "$dest_state")"
     cp -a -- "$src" "$dest_state"
-    say "seeded $dest_state from looks/alpenflage.lua"
+    say "seeded $dest_state from looks/0xyc.lua"
   fi
   if [[ -e "$dest_marker" ]]; then
     say "current-look marker already exists — not overwriting"
   else
-    printf 'alpenflage\n' > "$dest_marker"
+    printf '0xyc\n' > "$dest_marker"
     say "wrote $dest_marker"
   fi
 }
@@ -614,7 +614,7 @@ run_91_local_ai() {
   ollama pull qwen3:14b
   ollama create f3nt -f "$dest_share/Modelfile"
   systemctl --user stop ollama.service
-  say "after reboot: tty1 -> start-hyprland (alpenflage)"
+  say "after reboot: tty1 -> start-hyprland (0xyc)"
 }
 
 run_module() {

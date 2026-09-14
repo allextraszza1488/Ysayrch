@@ -9,21 +9,22 @@
 # -----------------------------------------------------------------------------
 set -euo pipefail
 
-# the two recipes: alpenflage.lua and tigerstripe.lua
 LOOKS_DIR=$HOME/.config/hypr/looks
 # hyprland.lua dofile()s this on every reload; this script overwrites it
 STATE=$HOME/.config/hypr/look-state.lua
 # plain text file holding just the current look's name
 MARKER=$HOME/.config/hypr/current-look
 
-# no marker yet means first run; assume alpenflage so the first toggle goes to tigerstripe
-current=$(cat "$MARKER" 2>/dev/null || echo "alpenflage")
+current=$(cat "$MARKER" 2>/dev/null || echo "0xyc")
 
-# three looks now, cycle in a fixed order
+# 0xyc (hacky dark) → mdmamph (wife) → diyetlyser (junkyard) → 0xyc
 case "$current" in
-  alpenflage)  next="tigerstripe" ;;
-  tigerstripe) next="gyaru" ;;
-  *)           next="alpenflage" ;;
+  0xyc)       next="mdmamph" ;;
+  mdmamph)    next="diyetlyser" ;;
+  diyetlyser) next="0xyc" ;;
+  # leftovers from the old names
+  tigerstripe|alpenflage|gyaru) next="0xyc" ;;
+  *)          next="0xyc" ;;
 esac
 
 # hyprland picks this up on the reload below
@@ -46,14 +47,9 @@ cp $HOME/.config/kitty/looks/"$next".conf \
 # parse the recipe with real Lua rather than grepping Lua syntax with sed
 wallpaper=$(lua5.4 -e "io.write(dofile('$LOOKS_DIR/$next.lua').wallpaper)")
 
-# gyaru's "wallpaper" field is a folder, not a file -- pick one at random.
-# `|| true` on the pipeline: under set -euo pipefail, a MISSING folder makes
-# find itself fail, which would otherwise abort the whole script right here
-# -- after borders/kitty/fuzzel/btop already flipped to gyaru but before
-# hyprpaper.conf is touched, a half-applied toggle. An EMPTY (but existing)
-# folder doesn't fail, it just leaves $wallpaper blank -- caught explicitly
-# below instead, since a blank `path =` line would black-screen hyprpaper.
-if [ "$next" = "gyaru" ]; then
+# If a look's wallpaper field is a directory, pick one file at random.
+# File paths are used as-is. Palettes do not sample the image.
+if [ -d "$wallpaper" ]; then
   wallpaper=$(find "$wallpaper" -maxdepth 1 -type f 2>/dev/null | shuf -n1 || true)
 fi
 

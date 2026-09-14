@@ -84,12 +84,10 @@ hl.config({
   decoration = {
     -- corner radius on every window
     rounding = 8,
-    -- focused window very slightly transparent
-    active_opacity = 0.98,
-    -- unfocused windows noticeably transparent, so focus is obvious at a glance
-    inactive_opacity = 0.85,
-    -- background blur behind transparent windows
-    blur   = { enabled = true, size = 6, passes = 2 },
+    -- solid windows
+    active_opacity = 1.0,
+    inactive_opacity = 1.0,
+    blur   = { enabled = false, size = 6, passes = 2 },
     -- drop shadow; colour is ARGB, 0x55 alpha
     shadow = { enabled = true, range = 16, render_power = 3, color = 0x55000000 },
     glow = {
@@ -161,7 +159,7 @@ hl.animation({ leaf = "windows",    enabled = true, speed = 4.5, bezier = "easeO
 -- border gradient animates when focus moves
 hl.animation({ leaf = "border",     enabled = true, speed = 5.4, bezier = "easeOutQuint" })
 -- opacity fades, fastest of the four so focus changes feel immediate
-hl.animation({ leaf = "fade",       enabled = true, speed = 3.0, bezier = "quick" })
+hl.animation({ leaf = "fade",       enabled = false, speed = 3.0, bezier = "quick" })
 -- workspaces slide sideways; slowest, because it is the biggest visual move
 hl.animation({ leaf = "workspaces", enabled = true, speed = 2.5, bezier = "easeOutQuint", style = "slide" })
 
@@ -453,5 +451,5 @@ hl.bind("Print", hl.dsp.exec_cmd(
 
 -- re-read this file without restarting the session
 hl.bind(mod .. " + SHIFT + R", hl.dsp.exec_cmd("hyprctl reload"))
--- cycle alpenflage -> tigerstripe -> gyaru -> alpenflage
+-- cycle 0xyc -> mdmamph -> diyetlyser -> 0xyc
 hl.bind(mod .. " + SHIFT + T", hl.dsp.exec_cmd(scripts .. "/toggle-look.sh"))

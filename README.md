@@ -11,6 +11,6 @@ cd ~/arch-skeleton
 
 Does **not** touch disks. Never p5/p6/p7.
 
-Then reboot (or login tty1). `start-hyprland` runs on tty1. Look is **alpenflage**; `toggle-look.sh` / your existing keybind cycles alpenflage / tigerstripe / gyaru (gyaru is just a color look now, not an ollama command).
+Then reboot (or login tty1). `start-hyprland` runs on tty1. Look is **0xyc**; SUPER+SHIFT+T cycles 0xyc / mdmamph / diyetlyser. Windows are opaque.
 
 `--without local-ai` if you don't want the 14B pulls (~18G).
