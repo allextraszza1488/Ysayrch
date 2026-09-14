@@ -5,5 +5,5 @@ return {
   border_inactive = "rgba(120818ee)",
   glow_active     = "rgba(ff4fb0a6)",
   glow_inactive   = "rgba(7b3bb033)",
-  wallpaper       = os.getenv("HOME") .. "/Pictures/wallpapers/Desk/1325248.jpeg",
+  wallpaper       = os.getenv("HOME") .. "/Pictures/wallpapers/mdmamph.jpg",
 }
