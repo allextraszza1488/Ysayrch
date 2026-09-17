@@ -1,3 +1,10 @@
+# Autologin on tty1 (set up by install.sh) drops straight into a fish
+# login shell -- exec into Hyprland immediately so the only prompt after
+# the LUKS passphrase is the desktop itself, not a bare shell.
+if status is-login; and test (tty) = /dev/tty1
+    exec start-hyprland
+end
+
 if status is-interactive
     # Modern CLI replacements, falling back cleanly if not installed yet
     # (sudo bash ~/arch-setup/install-cli-tools.sh installs all of these).

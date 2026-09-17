@@ -7,7 +7,11 @@
 -- adapter owns which output again. Match on mode/scale instead, whichever
 -- output it lands on; re-pin to a real `output` value once the reinstalled
 -- box's actual enumeration (and passthrough plan, if it happens) is known.
+-- output MUST be a string -- "" is the actual wildcard, omitting the key
+-- entirely is a hard error ("'output' field is required and must be a
+-- string"), caught live in the VM test.
 hl.monitor({
+  output = "",
   -- 120 not the panel's 199.99: measured 26.2W vs 29.8W idle, 60Hz saved nothing more
   mode = "2560x1440@120.00",
   position = "auto",

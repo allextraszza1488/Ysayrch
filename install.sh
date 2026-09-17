@@ -314,10 +314,32 @@ run_10_hypr_stack() {
     hyprland xdg-desktop-portal-hyprland waybar hyprpaper lua jq libnotify
     fuzzel mako grim slurp wl-clipboard cliphist pipewire pipewire-pulse wireplumber
     noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-jetbrains-mono-nerd librewolf kitty fish curl
-    neovim btop fastfetch thunar gvfs
+    neovim tree-sitter-cli btop fastfetch thunar gvfs
   )
   say "pacman_needed: ${pkgs[*]}"
   pacman_needed "${pkgs[@]}"
+
+  # video/render/input: direct DRM buffer access (hyprpaper, screenshots,
+  # anything doing its own GBM allocation instead of going through the
+  # compositor). Without these, Hyprland itself can still start -- it goes
+  # through the DRM master fd systemd-logind hands the seat -- but a second
+  # process trying to allocate its own GBM buffer gets a silent
+  # DRM_IOCTL_MODE_CREATE_DUMB: Permission denied and just doesn't render,
+  # no crash. Caught live: hyprpaper started, logged EGL/GBM errors, never
+  # showed a wallpaper, no error visible anywhere else.
+  local u grp missing=()
+  u=$(real_user)
+  for grp in video render input; do
+    getent group "$grp" >/dev/null 2>&1 || continue
+    id -nG "$u" | grep -qw "$grp" || missing+=("$grp")
+  done
+  if ((${#missing[@]} > 0)); then
+    say "adding $u to: ${missing[*]}"
+    sudo usermod -aG "$(IFS=,; echo "${missing[*]}")" "$u"
+    warn "group membership needs a fresh login to take effect"
+  else
+    say "$u already in video/render/input"
+  fi
 }
 
 run_20_gpu() {
@@ -402,6 +424,32 @@ run_30_dots() {
     mkdir -p "$(real_home)/.local/share/fonts"
     install_tree "$fontsrc" "$(real_home)/.local/share/fonts"
     fc-cache -f "$(real_home)/.local/share/fonts" >/dev/null 2>&1 || true
+  fi
+
+  # fish is the shell config.fish's tty1-exec guard runs in -- without this
+  # the guard never fires (login shell stays whatever `useradd` set) and
+  # tty1 just sits at a fish-less prompt instead of launching Hyprland.
+  local u
+  u=$(real_user)
+  if [[ "$(getent passwd "$u" | cut -d: -f7)" != "/usr/bin/fish" ]]; then
+    say "chsh -s /usr/bin/fish $u"
+    sudo chsh -s /usr/bin/fish "$u"
+  else
+    say "login shell already fish"
+  fi
+
+  # tty1 autologin, so a LUKS passphrase at boot is the only prompt --
+  # not a display manager, matches the existing tty1-launches-Hyprland setup.
+  local getty_dir=/etc/systemd/system/getty@tty1.service.d
+  local getty_conf="$getty_dir/autologin.conf"
+  if [[ -f "$getty_conf" ]] && grep -q -- "--autologin $u " "$getty_conf" 2>/dev/null; then
+    say "tty1 autologin already configured for $u"
+  else
+    say "configuring tty1 autologin for $u"
+    sudo mkdir -p "$getty_dir"
+    printf '[Service]\nExecStart=\nExecStart=-/usr/bin/agetty --autologin %s --noclear %%I $TERM\n' "$u" \
+      | sudo tee "$getty_conf" >/dev/null
+    sudo systemctl daemon-reload
   fi
 }
 
