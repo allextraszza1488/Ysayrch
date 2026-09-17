@@ -27,3 +27,7 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 vim.api.nvim_create_autocmd("TextYankPost", {
   callback = function() vim.hl.on_yank({ timeout = 150 }) end,
 })
+
+-- Arduino sketches (.ino) are just C++ — treat them as cpp so treesitter
+-- highlighting/indent kicks in (there's no separate arduino parser).
+vim.filetype.add({ extension = { ino = "cpp" } })

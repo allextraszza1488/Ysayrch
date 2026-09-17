@@ -15,11 +15,10 @@ SUPER + Space               workspace overview (fuzzel: every workspace + window
 SUPER + S                   toggle scratchpad (dropdown terminal)
 SUPER + CTRL + S            move focused window to scratchpad
 SUPER + CTRL + V            clipboard history (cliphist + fuzzel)
-SUPER + SHIFT + P           power menu (logout/reboot/shutdown -- suspend removed, hard-hang risk, see fix-suspend-hang.sh)
 SUPER + SHIFT + /           this cheatsheet
 SUPER + SHIFT + A           shortcuts hub (keybinds / linux commands / vim cheatsheet)
 SUPER + SHIFT + R           reload Hyprland config
-SUPER + SHIFT + T           cycle look (alpenflage / tigerstripe / gyaru)
+SUPER + SHIFT + T           cycle look (0xyc / mdmamph / diyetlyser)
 CTRL + ALT + Delete         open btop (process monitor)
 
 -- focus / move / resize (arrows == hjkl, same action, pick either) --

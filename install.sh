@@ -261,6 +261,7 @@ RUNTIME_STATE_FILES=(
   current-look
   hyprpaper.conf
   active-look.conf
+  fuzzel.ini
 )
 
 is_runtime_state() {
@@ -312,7 +313,7 @@ run_10_hypr_stack() {
   local pkgs=(
     hyprland xdg-desktop-portal-hyprland waybar hyprpaper lua jq libnotify
     fuzzel mako grim slurp wl-clipboard cliphist pipewire pipewire-pulse wireplumber
-    noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-jetbrains-mono-nerd firefox kitty fish curl
+    noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-jetbrains-mono-nerd librewolf kitty fish curl
     neovim btop fastfetch thunar gvfs
   )
   say "pacman_needed: ${pkgs[*]}"

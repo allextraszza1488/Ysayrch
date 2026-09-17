@@ -13,7 +13,7 @@ local mod       = "SUPER"
 -- terminal, opened by SUPER+Return and wrapped around btop
 local terminal  = "kitty"
 -- browser, opened by SUPER+B
-local browser   = "firefox"
+local browser   = "librewolf"
 -- app launcher and the dmenu backend every menu script pipes into
 local launcher  = "fuzzel"
 
@@ -189,7 +189,6 @@ hl.env("XCURSOR_SIZE", "24")
 
 -- fuzzel wraps Terminal=true .desktop entries as "$TERMINAL -e"; unset it fails silently
 hl.env("TERMINAL", "kitty")
-
 
 -- -----------------------------------------------------------------------------
 -- WINDOW RULES -- float genuine dialogs, tile everything else
@@ -391,8 +390,6 @@ hl.bind(mod .. " + CTRL + V", hl.dsp.exec_cmd(scripts .. "/clipboard-picker.sh")
 -- MENUS -- fuzzel lists, same idiom as the launcher
 -- -----------------------------------------------------------------------------
 
--- logout / reboot / shutdown; suspend is absent until fix-suspend-hang.sh is run
-hl.bind(mod .. " + SHIFT + P",     hl.dsp.exec_cmd(scripts .. "/power-menu.sh"))
 -- keybind cheatsheet; reads reference/keybinds.txt, which is maintained BY HAND
 hl.bind(mod .. " + SHIFT + slash", hl.dsp.exec_cmd(scripts .. "/keybind-cheatsheet.sh"))
 
