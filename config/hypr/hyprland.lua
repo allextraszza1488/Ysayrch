@@ -10,14 +10,12 @@
 
 -- window-management modifier; SUPER only, so nothing can collide inside nvim
 local mod       = "SUPER"
--- terminal, opened by SUPER+Return and wrapped around btop and yazi
+-- terminal, opened by SUPER+Return and wrapped around btop
 local terminal  = "kitty"
 -- browser, opened by SUPER+B
 local browser   = "firefox"
 -- app launcher and the dmenu backend every menu script pipes into
 local launcher  = "fuzzel"
--- terminal file manager, opened by SUPER+N (not the nvim one, that is SUPER+F)
-local files     = "yazi"
 
 
 -- -----------------------------------------------------------------------------
@@ -225,10 +223,8 @@ hl.bind(mod .. " + Return", hl.dsp.exec_cmd(terminal))
 hl.bind(mod .. " + B", hl.dsp.exec_cmd(browser))
 -- app launcher
 hl.bind(mod .. " + D", hl.dsp.exec_cmd(launcher))
--- yazi in a terminal window
-hl.bind(mod .. " + N", hl.dsp.exec_cmd(terminal .. " -e " .. files))
--- nvim-based file manager; the .desktop entry launches this same script for folders
-hl.bind(mod .. " + F", hl.dsp.exec_cmd(scripts .. "/filemanager-nvim.sh"))
+-- file manager
+hl.bind(mod .. " + F", hl.dsp.exec_cmd("thunar"))
 -- system monitor, on the Windows muscle-memory chord
 hl.bind("CTRL + ALT + Delete", hl.dsp.exec_cmd(terminal .. " --class btop -e btop"))
 -- picker over keybinds / linux commands / vim cheatsheet
@@ -236,17 +232,6 @@ hl.bind(mod .. " + SHIFT + A", hl.dsp.exec_cmd(scripts .. "/shortcuts-hub.sh"))
 -- command-phrase palette: pick a common command, get it typed/copied for you
 -- (unshifted pair to SHIFT+A above -- that one only displays, this inserts)
 hl.bind(mod .. " + A", hl.dsp.exec_cmd(scripts .. "/phrase-picker.sh"))
-
--- imv, spawned by nvim-fm/init.lua when you press Enter on an image
-hl.window_rule({
-  name  = "image-preview-float",
-  match = { class = "^(imv)$" },
-  float = true,
-  -- muParser EXPRESSION, not a percentage; "%" is modulo and fails silently at apply time
-  size  = { "monitor_w*0.7", "monitor_h*0.8" },
-})
-
--- the editor nvim-fm opens on Enter gets no rule at all: it tiles, like everything else
 
 -- btop: float small and pin across workspaces, so it's tuckable in a corner
 -- and visible from anywhere rather than tiling in the way. "pin" field here

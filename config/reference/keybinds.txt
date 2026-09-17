@@ -3,8 +3,7 @@ SUPER + Q                   close window
 SUPER + B                   open browser (firefox)
 SUPER + D                   app launcher (fuzzel)
 SUPER + A                   command-phrase palette (types/copies a common command)
-SUPER + N                   file manager, tiled (yazi in kitty)
-SUPER + F                   vim file manager (netrw tree + terminal + preview), floating + pinned
+SUPER + F                   file manager (Thunar)
 SUPER + M                   maximize
 SUPER + SHIFT + F           true fullscreen
 SUPER + V                   toggle floating
