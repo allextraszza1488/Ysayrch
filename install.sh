@@ -575,14 +575,38 @@ run_70_tuning() {
 
 run_80_security() {
   say "80-security"
-  echo "  would pacman_needed: ufw clamav arch-audit"
-  echo "  would ufw default deny incoming / allow outgoing, enable ufw"
-  echo "  would enable clamav-freshclam and a weekly home-scan timer"
+  pacman_needed ufw clamav arch-audit
+
+  if sudo ufw status | grep -q "Status: active"; then
+    say "ufw already active"
+  else
+    say "ufw: default deny incoming, allow outgoing, enable"
+    sudo ufw default deny incoming
+    sudo ufw default allow outgoing
+    sudo ufw --force enable
+  fi
+
+  enable_now clamav-freshclam.service
+
+  local dest_unit dest_timer
+  dest_unit="$(real_home)/.config/systemd/user/home-scan.service"
+  dest_timer="$(real_home)/.config/systemd/user/home-scan.timer"
+  install_file "$ROOT/extras/security/home-scan.service" "$dest_unit"
+  install_file "$ROOT/extras/security/home-scan.timer" "$dest_timer"
+
+  systemctl --user daemon-reload
+  if systemctl --user is-enabled --quiet home-scan.timer 2>/dev/null; then
+    say "home-scan.timer already enabled"
+  else
+    say "enable --now --user home-scan.timer"
+    systemctl --user enable --now home-scan.timer
+  fi
 }
 
 run_90_steam() {
   say "90-steam"
-  echo "  skip by default (print-only). --with steam later if you want it."
+  enable_multilib_if_needed
+  pacman_needed steam
 }
 
 run_91_local_ai() {
@@ -664,6 +688,11 @@ plan_modules() {
         ;;
       60-suspend)
         [[ "$nvidia" == 1 ]] || continue
+        ;;
+      91-local-ai)
+        # Opt-in only: `ollama pull` is a real multi-GB download and you
+        # want to pick the moment, not have it happen on every rebuild.
+        continue
         ;;
     esac
     planned+=("$m")
