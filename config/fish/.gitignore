@@ -1,0 +1,5 @@
+# Runtime state, not source -- fish_add_path in config.fish already
+# manages fish_user_paths per-$HOME on every shell start. Shipping a
+# static fish_variables here bakes in whatever username committed it
+# (bit us: /home/admin/... survived a rename back to f3nt).
+fish_variables

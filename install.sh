@@ -18,6 +18,7 @@ ALL_MODULES=(
   10-hypr-stack
   20-gpu
   30-dots
+  35-nvim
   40-look
   50-snapshots
   60-suspend
@@ -57,6 +58,7 @@ canonical_module() {
     hypr-stack|hypr|10-hypr-stack|10) printf '10-hypr-stack\n' ;;
     gpu|20-gpu|20) printf '20-gpu\n' ;;
     dots|30-dots|30) printf '30-dots\n' ;;
+    nvim|35-nvim|35) printf '35-nvim\n' ;;
     look|40-look|40) printf '40-look\n' ;;
     snapshots|50-snapshots|50) printf '50-snapshots\n' ;;
     suspend|60-suspend|60) printf '60-suspend\n' ;;
@@ -319,6 +321,10 @@ run_10_hypr_stack() {
   say "pacman_needed: ${pkgs[*]}"
   pacman_needed "${pkgs[@]}"
 
+  # mouse-nav's on-screen keyboard (toggle-wvkbd.sh) -- AUR-only, no repo
+  # equivalent ships the same deskintl full-layout build.
+  aur_needed wvkbd-deskintl
+
   # video/render/input: direct DRM buffer access (hyprpaper, screenshots,
   # anything doing its own GBM allocation instead of going through the
   # compositor). Without these, Hyprland itself can still start -- it goes
@@ -416,6 +422,17 @@ run_30_dots() {
     if [[ -f "$dest_cfg/scripts/screenshot-watch.service" ]]; then
       install_link "$dest_cfg/scripts/screenshot-watch.service" \
         "$dest_cfg/systemd/user/screenshot-watch.service"
+      # Linking the unit into place is not enough -- caught live: grim/slurp
+      # saved screenshots fine, but with nothing ever `enable --now`'d, the
+      # clipboard-copy watcher just never ran and nobody noticed until a
+      # screenshot's path wasn't on the clipboard.
+      systemctl --user daemon-reload
+      if systemctl --user is-active --quiet screenshot-watch.service; then
+        say "screenshot-watch.service already running"
+      else
+        say "enable --now --user screenshot-watch.service"
+        systemctl --user enable --now screenshot-watch.service
+      fi
     fi
   fi
 
@@ -451,6 +468,29 @@ run_30_dots() {
       | sudo tee "$getty_conf" >/dev/null
     sudo systemctl daemon-reload
   fi
+}
+
+run_35_nvim() {
+  say "35-nvim"
+  local home lazypath out
+  home=$(real_home)
+  lazypath="$home/.local/share/nvim/lazy/lazy.nvim"
+
+  # nvim's own init.lua bootstrap only checks fs_stat(lazypath) -- if a
+  # prior run got interrupted mid-clone, the dir exists but is incomplete,
+  # and every future launch skips re-cloning forever. Detect and repair
+  # that instead of leaving it broken (caught live: exactly this state).
+  if [[ -d "$lazypath" && ! -f "$lazypath/lua/lazy/init.lua" ]]; then
+    warn "incomplete lazy.nvim clone at $lazypath -- removing"
+    rm -rf "$lazypath"
+  fi
+
+  say "bootstrapping lazy.nvim + syncing plugins"
+  if ! out=$(nvim --headless "+Lazy! sync" +qa 2>&1); then
+    warn "$out"
+    fail "nvim/lazy.nvim bootstrap failed"
+  fi
+  [[ -f "$lazypath/lua/lazy/init.lua" ]] || fail "lazy.nvim still missing after bootstrap"
 }
 
 run_40_look() {
@@ -636,6 +676,13 @@ run_80_security() {
     sudo ufw --force enable
   fi
 
+  # `ufw enable` sets ENABLED=yes in /etc/ufw/ufw.conf and loads rules for
+  # this boot, but on Arch that does NOT imply the systemd unit is enabled
+  # -- caught live: rules were "on" by ufw's own config yet ufw.service was
+  # disabled+inactive, so a reboot would have come up with no firewall at
+  # all despite ufw.conf claiming otherwise.
+  enable_now ufw.service
+
   enable_now clamav-freshclam.service
 
   local dest_unit dest_timer
@@ -714,6 +761,7 @@ run_module() {
     10-hypr-stack) run_10_hypr_stack ;;
     20-gpu)        run_20_gpu ;;
     30-dots)       run_30_dots ;;
+    35-nvim)       run_35_nvim ;;
     40-look)       run_40_look ;;
     50-snapshots)  run_50_snapshots ;;
     60-suspend)    run_60_suspend ;;
