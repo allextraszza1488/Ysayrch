@@ -13,7 +13,7 @@ local mod       = "SUPER"
 -- terminal, opened by SUPER+Return and wrapped around btop
 local terminal  = "kitty"
 -- browser, opened by SUPER+B
-local browser   = "librewolf"
+local browser   = "firefox"
 -- app launcher and the dmenu backend every menu script pipes into
 local launcher  = "fuzzel"
 

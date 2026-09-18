@@ -315,7 +315,7 @@ run_10_hypr_stack() {
   local pkgs=(
     hyprland xdg-desktop-portal-hyprland waybar hyprpaper lua jq libnotify
     fuzzel mako grim slurp wl-clipboard cliphist pipewire pipewire-pulse wireplumber
-    noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-jetbrains-mono-nerd librewolf kitty fish curl
+    noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-jetbrains-mono-nerd firefox kitty fish curl
     neovim tree-sitter-cli btop fastfetch thunar gvfs
   )
   say "pacman_needed: ${pkgs[*]}"
