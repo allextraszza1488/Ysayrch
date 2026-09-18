@@ -515,6 +515,15 @@ run_40_look() {
     say "wrote $dest_marker"
   fi
 
+  # fuzzel.ini/btop.conf only pick up look colors (and btop's GPU box) via
+  # apply-look.sh, which install.sh never called on its own before -- a
+  # fresh install sat with factory btop defaults (no GPU box) until the
+  # user happened to press the look-toggle bind once.
+  local dest_cfg
+  dest_cfg="$(real_home)/.config"
+  [[ -x "$dest_cfg/fuzzel/apply-look.sh" ]] && "$dest_cfg/fuzzel/apply-look.sh" 0xyc
+  [[ -x "$dest_cfg/btop/apply-look.sh" ]]   && "$dest_cfg/btop/apply-look.sh" 0xyc
+
   local wpsrc="$ROOT/config/wallpapers"
   local wpdest="$(real_home)/Pictures/wallpapers"
   if [[ -d "$wpsrc" ]]; then

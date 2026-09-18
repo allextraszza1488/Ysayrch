@@ -99,3 +99,11 @@ if [ ! -f "$btop_conf" ]; then
   btop --default-config > "$btop_conf"
 fi
 sed -i "s/^color_theme = .*/color_theme = \"$look\"/" "$btop_conf"
+
+# btop's own default is "cpu mem net proc" -- no GPU box. hyprland.lua's
+# btop-float-pinned window rule is already sized assuming gpu0 is shown
+# (see its own comment), so without this the window is oversized for
+# what's actually in it and GPU load never shows without a manual toggle.
+if ! grep -q '^shown_boxes = .*gpu0' "$btop_conf"; then
+  sed -i 's/^shown_boxes = .*/shown_boxes = "cpu mem net proc gpu0"/' "$btop_conf"
+fi
