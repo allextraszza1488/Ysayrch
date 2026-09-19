@@ -403,8 +403,10 @@ hl.bind(mod .. " + SHIFT + M", hl.dsp.exec_cmd(scripts .. "/toggle-mouse-nav.sh"
 -- AUDIO -- media keys; no desktop environment means nothing else handles them
 -- -----------------------------------------------------------------------------
 
--- volume up; -l 1 caps at 100% so it cannot be pushed into distortion
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true })
+-- volume up; -l 2.0 caps the ceiling at 200% (was -l 1 / 100%) -- past
+-- 100% wpctl is software-boosting the signal, not raising a hardware
+-- level, so distortion risk is real up there, especially on headphones
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 2.0 @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true })
 -- volume down
 hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),      { locked = true, repeating = true })
 -- mute toggle; locked = true means these work on the lock screen too
