@@ -16,7 +16,7 @@
   "height": 30,
   "spacing": 3,
 
-  "modules-left": ["wireplumber"],
+  "modules-left": ["custom/mouse-toggle", "wireplumber"],
   "modules-center": [
     "custom/ws1", "custom/ws2", "custom/ws3", "custom/ws4", "custom/ws5",
     "custom/ws6", "custom/ws7", "custom/ws8", "custom/ws9",
@@ -24,9 +24,18 @@
     "custom/sep-left",
     "wlr/taskbar",
     "custom/sep-right",
-    "custom/launcher", "custom/keyboard", "custom/power"
+    "custom/launcher", "custom/keyboard"
   ],
-  "modules-right": ["clock"],
+  "modules-right": ["clock", "custom/power"],
+
+  // toggles back to the normal bar (same script as SUPER+SHIFT+M and the
+  // normal bar's own mouse-toggle button -- it detects which bar is
+  // running and switches to the other one either way).
+  "custom/mouse-toggle": {
+    "format": "",
+    "on-click": "$HOME/.config/scripts/toggle-mouse-nav.sh",
+    "tooltip": "Back to normal bar"
+  },
 
   "wireplumber": {
     "format": "vol {volume}",
@@ -34,7 +43,7 @@
   },
 
   "clock": {
-    "format": "{:%a %Y-%m-%d  %H:%M}",
+    "format": "{:%a %d-%m-%Y  %H:%M}",
     "tooltip-format": "{:%A, %d %B %Y}"
   },
 
@@ -92,8 +101,7 @@
     "tooltip": false
   },
 
-  // icon only, not a word -- opens Logout/Restart/Shutdown, each with its
-  // own Yes/No confirm (power-confirm-menu.sh -> confirm-power-action.sh).
+  // icon only, not a word -- Lock/Restart/Shutdown (power-confirm-menu.sh).
   // Same script the default bar's power icon uses (see ~/.config/waybar).
   "custom/power": {
     "format": "",

@@ -4,19 +4,40 @@
    so they read as separate zones, not one undifferentiated row. */
 * {
   font-family: "JetBrainsMono Nerd Font", sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   min-height: 0;
 }
 
 window#waybar {
-  background-color: rgba(0, 0, 0, 0.55);
+  background-color: rgba(0, 0, 0, 0.42);
   color: #d8d0c0;
 }
 
+/* same blackletter treatment and sizing as the normal bar's informational modules */
 #wireplumber,
 #clock {
   color: #d8d0c0;
+  font-family: "UnifrakturMaguntia", "JetBrainsMono Nerd Font", sans-serif;
+  font-weight: 400;
   padding: 0 12px;
+}
+
+#wireplumber {
+  font-size: 19px;
+}
+
+#clock {
+  font-size: 23px;
+}
+
+/* toggle button -- identical styling to the normal bar's own mouse-toggle,
+   so the "back" button looks like the same control either bar you're on */
+#custom-mouse-toggle {
+  font-size: 16px;
+  padding: 0 14px;
+  border-radius: 5px;
+  color: #d8d0c0;
+  background-color: rgba(255, 255, 255, 0.06);
 }
 
 /* workspaces group -- cool blue tint */

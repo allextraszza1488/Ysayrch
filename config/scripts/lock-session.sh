@@ -2,8 +2,7 @@
 # -----------------------------------------------------------------------------
 # Locks the session without touching it: nothing closes, music keeps
 # playing, windows stay exactly as they are -- hyprlock just draws a
-# password overlay on top until you type it. Distinct from Logout, which
-# actually ends the session (see confirm-power-action.sh).
+# password overlay on top until you type it. Does not end the session.
 #
 # Needs `hyprlock` installed (extra/hyprlock, official repo, no AUR/build
 # needed): sudo pacman -S hyprlock

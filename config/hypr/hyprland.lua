@@ -409,6 +409,24 @@ hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_S
 
 
 -- -----------------------------------------------------------------------------
+-- MOUSE KEYS -- keyboard-driven cursor, for when you don't want to touch the
+-- mouse. Needs ydotool + ydotoold running (pacman -S ydotool, systemctl
+-- enable --now ydotool.service -- one-time root setup, not this config's job).
+-- -----------------------------------------------------------------------------
+
+-- pixels per nudge; repeating = true means holding the key keeps moving it
+local mousestep = 20
+hl.bind(mod .. " + ALT + left",  hl.dsp.exec_cmd("ydotool mousemove -x -" .. mousestep .. " -y 0"), { repeating = true })
+hl.bind(mod .. " + ALT + right", hl.dsp.exec_cmd("ydotool mousemove -x "  .. mousestep .. " -y 0"), { repeating = true })
+hl.bind(mod .. " + ALT + up",    hl.dsp.exec_cmd("ydotool mousemove -x 0 -y -" .. mousestep),       { repeating = true })
+hl.bind(mod .. " + ALT + down",  hl.dsp.exec_cmd("ydotool mousemove -x 0 -y "  .. mousestep),       { repeating = true })
+
+-- left click (LKM). ydotool's button code for BTN_LEFT is 0xC0 -- verify once
+-- ydotool's actually installed, this hex code is standard but untested here.
+hl.bind(mod .. " + ALT + space", hl.dsp.exec_cmd("ydotool click 0xC0"))
+
+
+-- -----------------------------------------------------------------------------
 -- SCREENSHOT -- saves to ~/Pictures/Screenshots, watched by screenshot-watch.sh
 -- That watcher copies each new file's PATH to the clipboard via wl-copy
 -- -----------------------------------------------------------------------------

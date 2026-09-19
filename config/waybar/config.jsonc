@@ -1,8 +1,8 @@
 // Mostly click-free by design: volume + a fixed string + clock, plus two
 // deliberate icon exceptions -- a mouse-nav toggle (far left corner) and a
-// power menu (far right corner), reachable without SUPER+SHIFT+M / going
-// into mouse-nav mode first. Everything else stays keyboard-only; no tray,
-// no other click targets.
+// power menu (far right corner), reachable without going into mouse-nav
+// mode first. Everything else stays keyboard-only; no tray, no other
+// click targets.
 //
 // This comment used to also name bluetooth-menu.sh and wifi-menu.sh as
 // keybinds. Neither script has ever existed and neither was ever bound, so
@@ -23,17 +23,16 @@
   "modules-center": ["custom/vanity"],
   "modules-right": ["clock", "custom/power"],
 
-  // toggles the mouse-nav bar (same as SUPER+SHIFT+M) -- see
-  // scripts/toggle-mouse-nav.sh and waybar-mouse/.
+  // toggles the mouse-nav bar -- see scripts/toggle-mouse-nav.sh and waybar-mouse/.
   "custom/mouse-toggle": {
     "format": "",
     "on-click": "$HOME/.config/scripts/toggle-mouse-nav.sh",
     "tooltip": "Toggle mouse nav bar"
   },
 
-  // Lock/Logout/Restart/Shutdown, Lock skips confirm (non-destructive),
-  // the other three ask Yes/No first. Same script the mouse nav bar's
-  // power icon uses (waybar-mouse/).
+  // Lock/Restart/Shutdown. Lock skips confirm (non-destructive); Restart
+  // and Shutdown ask Yes/No first. Same script the mouse nav bar's power
+  // icon uses (waybar-mouse/).
   "custom/power": {
     "format": "",
     "on-click": "$HOME/.config/scripts/power-confirm-menu.sh",
@@ -66,7 +65,7 @@
     // %a (day name) added so the gothic clock font actually has letters to
     // render -- pure digits/punctuation don't show blackletter styling at
     // all, confirmed by screenshot before making this change.
-    "format": "{:%a %Y-%m-%d  %H:%M}",
+    "format": "{:%a %d-%m-%Y  %H:%M}",
     "tooltip-format": "{:%A, %d %B %Y}"
   }
 }
