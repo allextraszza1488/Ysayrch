@@ -1,0 +1,18 @@
+# mako notification styling. Sizing/font are static; colors come from
+# colors.conf, regenerated per-look by apply-look.sh (see toggle-look.sh --
+# SUPER+SHIFT+T). Don't hand-edit colors here, edit colors.conf or the
+# apply-look.sh color-role mapping instead, or a look toggle will overwrite it.
+
+font=JetBrainsMono Nerd Font 15
+
+# ~50% bigger than mako's defaults (300x100-ish, padding 5, margin 10, border 2)
+width=450
+height=150
+padding=8
+margin=15
+border-size=3
+border-radius=8
+
+default-timeout=8000
+
+include=~/.config/mako/colors.conf

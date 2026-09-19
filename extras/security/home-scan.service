@@ -5,4 +5,4 @@ Description=Weekly ClamAV scan of %h
 Type=oneshot
 Nice=19
 IOSchedulingClass=idle
-ExecStart=/usr/bin/clamscan -r --infected --exclude-dir=^%h/.cache --log=%h/.local/state/home-scan.log %h
+ExecStart=%h/.local/bin/home-scan.sh

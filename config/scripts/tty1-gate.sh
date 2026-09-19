@@ -3,7 +3,7 @@
 # Runs as root, in place of a bare `agetty --autologin admin` in
 # /etc/systemd/system/getty@tty1.service.d/autologin.conf. Normal boot/crash
 # respawns still autologin as before; the ONE difference is a marker file
-# the mouse-nav bar's Logout button drops right before it exits Hyprland
+# the power menu's Logout button drops right before it exits Hyprland
 # (confirm-power-action.sh, "logout" case) -- if present, this consumes it
 # and shows a real login: prompt exactly once instead of autologin.
 #

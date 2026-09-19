@@ -393,11 +393,6 @@ hl.bind(mod .. " + CTRL + V", hl.dsp.exec_cmd(scripts .. "/clipboard-picker.sh")
 -- keybind cheatsheet; reads reference/keybinds.txt, which is maintained BY HAND
 hl.bind(mod .. " + SHIFT + slash", hl.dsp.exec_cmd(scripts .. "/keybind-cheatsheet.sh"))
 
--- mouse-driven nav bar: workspaces/taskbar/launcher/keyboard/power, entirely
--- separate process+config from the main bar. Independent of the look-swap
--- system on purpose -- not tied to any look, on/off on its own bind.
-hl.bind(mod .. " + SHIFT + M", hl.dsp.exec_cmd(scripts .. "/toggle-mouse-nav.sh"))
-
 
 -- -----------------------------------------------------------------------------
 -- AUDIO -- media keys; no desktop environment means nothing else handles them

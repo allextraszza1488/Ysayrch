@@ -3,9 +3,9 @@
 # Swaps the active "look" and reloads everything that shows it.
 # Bound to SUPER+SHIFT+T.
 #
-# Reaches: hyprland borders/glow, kitty colours, wallpaper, fuzzel, btop.
-# Still does NOT reach: waybar, mako -- both need a live-reload/restart step
-# this script doesn't do yet, so they keep hardcoded colours for now.
+# Reaches: hyprland borders/glow, kitty colours, wallpaper, fuzzel, btop, mako.
+# Still does NOT reach: waybar -- needs a live-reload step this script
+# doesn't do yet, so it keeps hardcoded colours for now.
 # -----------------------------------------------------------------------------
 set -euo pipefail
 
@@ -43,6 +43,10 @@ cp $HOME/.config/kitty/looks/"$next".conf \
 # btop: always spawned fresh (CTRL+ALT+Delete), same deal, no reload needed.
 "$HOME/.config/fuzzel/apply-look.sh" "$next"
 "$HOME/.config/btop/apply-look.sh" "$next"
+
+# mako HAS a running daemon, unlike fuzzel/btop -- needs an explicit reload.
+"$HOME/.config/mako/apply-look.sh" "$next"
+makoctl reload 2>/dev/null || true
 
 # parse the recipe with real Lua rather than grepping Lua syntax with sed
 wallpaper=$(lua5.4 -e "io.write(dofile('$LOOKS_DIR/$next.lua').wallpaper)")

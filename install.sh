@@ -321,10 +321,6 @@ run_10_hypr_stack() {
   say "pacman_needed: ${pkgs[*]}"
   pacman_needed "${pkgs[@]}"
 
-  # mouse-nav's on-screen keyboard (toggle-wvkbd.sh) -- AUR-only, no repo
-  # equivalent ships the same deskintl full-layout build.
-  aur_needed wvkbd-deskintl
-
   # video/render/input: direct DRM buffer access (hyprpaper, screenshots,
   # anything doing its own GBM allocation instead of going through the
   # compositor). Without these, Hyprland itself can still start -- it goes
@@ -519,10 +515,19 @@ run_40_look() {
   # apply-look.sh, which install.sh never called on its own before -- a
   # fresh install sat with factory btop defaults (no GPU box) until the
   # user happened to press the look-toggle bind once.
+  #
+  # mako is worse than cosmetic drift here: its config `include=`s a
+  # colors.conf that only apply-look.sh generates. If that file doesn't
+  # exist yet (true on every fresh install), mako refuses to parse its
+  # config at all and never starts -- no notification daemon, not even a
+  # degraded one. Confirmed by testing (moved colors.conf aside, ran
+  # `mako -c config`: "Unable to open colors.conf" -> "Failed to parse
+  # config"). So this call isn't optional the way fuzzel/btop's are.
   local dest_cfg
   dest_cfg="$(real_home)/.config"
   [[ -x "$dest_cfg/fuzzel/apply-look.sh" ]] && "$dest_cfg/fuzzel/apply-look.sh" 0xyc
   [[ -x "$dest_cfg/btop/apply-look.sh" ]]   && "$dest_cfg/btop/apply-look.sh" 0xyc
+  [[ -x "$dest_cfg/mako/apply-look.sh" ]]   && "$dest_cfg/mako/apply-look.sh" 0xyc
 
   local wpsrc="$ROOT/config/wallpapers"
   local wpdest="$(real_home)/Pictures/wallpapers"

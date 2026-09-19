@@ -1,0 +1,3 @@
+# Runtime state -- toggle-look.sh's apply-look.sh regenerates this on every
+# toggle. Not something you'd hand-edit directly.
+colors.conf
