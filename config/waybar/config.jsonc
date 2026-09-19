@@ -1,6 +1,8 @@
-// Mostly click-free by design: volume + a fixed string + clock, plus one
-// deliberate icon exception -- a power menu (far right corner). Everything
-// else stays keyboard-only; no tray, no other click targets.
+// Mostly click-free by design: volume + a fixed string + clock, plus two
+// deliberate icon exceptions -- a mouse-nav toggle (far left corner) and a
+// power menu (far right corner), reachable without SUPER+SHIFT+M / going
+// into mouse-nav mode first. Everything else stays keyboard-only; no tray,
+// no other click targets.
 //
 // This comment used to also name bluetooth-menu.sh and wifi-menu.sh as
 // keybinds. Neither script has ever existed and neither was ever bound, so
@@ -17,12 +19,21 @@
   // hyprland/workspaces removed on purpose: its format-icons were empty
   // strings, so it drew five blank-but-still-clickable buttons -- invisible
   // hitboxes eating space on the left for no visual information at all.
-  "modules-left": ["wireplumber"],
+  "modules-left": ["custom/mouse-toggle", "wireplumber"],
   "modules-center": ["custom/vanity"],
   "modules-right": ["clock", "custom/power"],
 
+  // toggles the mouse-nav bar (same as SUPER+SHIFT+M) -- see
+  // scripts/toggle-mouse-nav.sh and waybar-mouse/.
+  "custom/mouse-toggle": {
+    "format": "",
+    "on-click": "$HOME/.config/scripts/toggle-mouse-nav.sh",
+    "tooltip": "Toggle mouse nav bar"
+  },
+
   // Lock/Logout/Restart/Shutdown, Lock skips confirm (non-destructive),
-  // the other three ask Yes/No first.
+  // the other three ask Yes/No first. Same script the mouse nav bar's
+  // power icon uses (waybar-mouse/).
   "custom/power": {
     "format": "",
     "on-click": "$HOME/.config/scripts/power-confirm-menu.sh",
