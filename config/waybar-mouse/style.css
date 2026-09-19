@@ -13,7 +13,7 @@ window#waybar {
   color: #d8d0c0;
 }
 
-/* same blackletter treatment and sizing as the normal bar's informational modules */
+/* same blackletter treatment, size, and letter-spacing as the normal bar */
 #wireplumber,
 #clock {
   color: #d8d0c0;
@@ -24,10 +24,12 @@ window#waybar {
 
 #wireplumber {
   font-size: 19px;
+  letter-spacing: 3px;
 }
 
 #clock {
   font-size: 23px;
+  letter-spacing: 3px;
 }
 
 /* toggle button -- identical styling to the normal bar's own mouse-toggle,

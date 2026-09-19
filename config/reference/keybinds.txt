@@ -19,8 +19,6 @@ SUPER + SHIFT + /           this cheatsheet
 SUPER + SHIFT + A           shortcuts hub (keybinds / linux commands / vim cheatsheet)
 SUPER + SHIFT + R           reload Hyprland config
 SUPER + SHIFT + T           cycle look (0xyc / mdmamph / diyetlyser)
-SUPER + ALT + arrows        move mouse cursor (ydotool, hold to repeat)
-SUPER + ALT + Space         left click (ydotool)
 CTRL + ALT + Delete         open btop (process monitor)
 
 -- focus / move / resize (arrows == hjkl, same action, pick either) --

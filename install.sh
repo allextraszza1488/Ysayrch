@@ -675,6 +675,21 @@ run_70_tuning() {
   fi
 
   enable_now reflector.timer
+
+  # Wired-only hosts (f3nt-desktop): don't leave the Wi-Fi NIC scanning.
+  if [[ -n "$HOST" && -f "$ROOT/host/$HOST/NetworkManager/30-disable-wifi.conf" ]]; then
+    local nmconf=/etc/NetworkManager/conf.d/30-disable-wifi.conf
+    local nmsrc="$ROOT/host/$HOST/NetworkManager/30-disable-wifi.conf"
+    if [[ -f "$nmconf" ]] && cmp -s -- "$nmsrc" "$nmconf"; then
+      say "Wi-Fi already disabled via $nmconf"
+    else
+      say "install $nmconf (wifi.backend=none)"
+      [[ -f "$nmconf" ]] && backup_file "$nmconf"
+      sudo mkdir -p "$(dirname -- "$nmconf")"
+      sudo cp -- "$nmsrc" "$nmconf"
+    fi
+    nmcli radio wifi off 2>/dev/null || true
+  fi
 }
 
 run_80_security() {
