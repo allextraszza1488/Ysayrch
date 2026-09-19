@@ -1,11 +1,11 @@
-# arch-skeleton
+# Ysayrch
 
 You partition. This script is **after** a booted Arch.
 
 ```bash
 # as your user, on the new install
-git clone <this repo> ~/arch-skeleton   # or copy from PERSONAL stick
-cd ~/arch-skeleton
+git clone <this repo> ~/Ysayrch   # or copy from PERSONAL stick
+cd ~/Ysayrch
 ./install.sh --host f3nt-desktop        # omit --host on a random box
 ```
 
