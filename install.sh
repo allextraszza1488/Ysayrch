@@ -523,11 +523,16 @@ run_40_look() {
   # degraded one. Confirmed by testing (moved colors.conf aside, ran
   # `mako -c config`: "Unable to open colors.conf" -> "Failed to parse
   # config"). So this call isn't optional the way fuzzel/btop's are.
-  local dest_cfg
+  #
+  # Apply whichever look is actually active (the marker above), not a
+  # hardcoded 0xyc -- on a re-run after toggling, 0xyc left fuzzel/btop/mako
+  # in 0xyc colors while hypr/kitty/wallpaper stayed on the active look.
+  local dest_cfg look
   dest_cfg="$(real_home)/.config"
-  [[ -x "$dest_cfg/fuzzel/apply-look.sh" ]] && "$dest_cfg/fuzzel/apply-look.sh" 0xyc
-  [[ -x "$dest_cfg/btop/apply-look.sh" ]]   && "$dest_cfg/btop/apply-look.sh" 0xyc
-  [[ -x "$dest_cfg/mako/apply-look.sh" ]]   && "$dest_cfg/mako/apply-look.sh" 0xyc
+  look=$(tr -d '[:space:]' < "$dest_marker")
+  [[ -x "$dest_cfg/fuzzel/apply-look.sh" ]] && "$dest_cfg/fuzzel/apply-look.sh" "$look"
+  [[ -x "$dest_cfg/btop/apply-look.sh" ]]   && "$dest_cfg/btop/apply-look.sh" "$look"
+  [[ -x "$dest_cfg/mako/apply-look.sh" ]]   && "$dest_cfg/mako/apply-look.sh" "$look"
 
   local wpsrc="$ROOT/config/wallpapers"
   local wpdest="$(real_home)/Pictures/wallpapers"
