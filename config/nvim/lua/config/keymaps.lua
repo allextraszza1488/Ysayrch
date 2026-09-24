@@ -95,7 +95,26 @@ local function c_names()
   return "main.c", "main"
 end
 
+-- Arduino sketches (.ino) get the same two keys, but "build and run" means
+-- compile + upload to the Nano, and the "debugger" is the serial terminal
+-- (nanoterm, ~/Arduino/nanoterm) with timestamps. The upload needs the
+-- ch341 driver's /dev/ttyUSB0, so nanoterm must not be running at the time;
+-- quit it with Ctrl+C before hitting <leader>r again.
+local arduino_fqbn = "arduino:avr:nano:cpu=atmega328"
+local arduino_port = "/dev/ttyUSB0"
+local nanoterm = "~/Arduino/nanoterm/nanoterm -t"
+
+local function is_sketch()
+  return vim.fn.expand("%:e") == "ino"
+end
+
 vim.keymap.set("n", "<leader>r", function()
+  if is_sketch() then
+    run_or_create("makefile", {
+      ("arduino-cli compile --upload -p %s -b %s . && %s"):format(arduino_port, arduino_fqbn, nanoterm),
+    })
+    return
+  end
   local src, exe = c_names()
   run_or_create("makefile", {
     ("gcc -Wall -Wextra -g %s -o %s && ./%s"):format(src, exe, exe),
@@ -103,6 +122,10 @@ vim.keymap.set("n", "<leader>r", function()
 end, { desc = "Run makefile (bottom split), or create one from template if missing" })
 
 vim.keymap.set("n", "<leader>g", function()
+  if is_sketch() then
+    run_or_create("script", { nanoterm })
+    return
+  end
   local _, exe = c_names()
   run_or_create("script", { ("gdb ./%s"):format(exe) })
 end, { desc = "Run debug script (bottom split), or create one from template if missing" })
